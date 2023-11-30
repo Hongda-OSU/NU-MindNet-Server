@@ -1,4 +1,6 @@
-pandas
-numpy
-networkx
-boto3
+pandas==2.1.3
+numpy==1.26.2
+networkx==3.2.1
+boto3==1.33.4
+matplotlib==3.8.2
+pytest==7.4.3
