@@ -24,7 +24,7 @@ class MindNet():
         plt.clf()
         color_map = ["#FF8C00" if node == self.user_id else "#6B8E23" for node in self.graph]
         nx.draw(self.graph, node_color = color_map, with_labels=True)
-        plt.savefig(self.save_file_name, format = "JPG", dpi = 500)
+        plt.savefig(self.save_file_name, format = "JPG", dpi = 1000)
         
     
         
