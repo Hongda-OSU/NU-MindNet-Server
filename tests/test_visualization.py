@@ -11,6 +11,7 @@ def test_directed_small():
     df = pd.read_csv(file_name)
     mn = MindNet(user_id= 1, df = df, save_file_name = image_name, directed = True)
     mn.visualize()
+    mn.visualize_degree()
     
 def test_undirected_small():
     file_name = "tests/test_data/test_undirected_small.csv"
@@ -45,4 +46,5 @@ def test_undirected_large():
     image_name = "test_undirected_large.jpg"
     df = pd.read_csv(file_name)
     mn = MindNet(user_id= 1, df = df, save_file_name = image_name, directed = False)
-    mn.visualize()
+
+    
