@@ -3,6 +3,7 @@ import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 import scipy as sp
+import matplotlib.patches as mpatches
 
 class MindNet():
     def __init__(self, user_id: int, df: pd.DataFrame, save_file_name: str, directed: bool):
@@ -37,7 +38,7 @@ class MindNet():
         """        
         plt.clf()
         color_map = ["#FF8C00" if node == self.user_id else "#6B8E23" for node in self.graph]
-        nx.draw(self.graph, node_color = color_map, with_labels=True)
+        nx.draw_networkx(self.graph, node_color = color_map, with_labels=True)
         plt.savefig(self.save_file_name, format = "JPG", dpi = 1000)
         
     def visualize_attr(self, attr_dic: dict):
@@ -51,7 +52,9 @@ class MindNet():
             if val not in color_dic:
                 color_dic[val] = np.random.uniform(0, 1, 3)
         color_map = [color_dic[attr_dic[node]] for node in self.graph]
-        nx.draw(self.graph, node_color = color_map, with_labels=True)
+        nx.draw_networkx(self.graph, node_color = color_map, with_labels=True)
+        handle = [mpatches.Patch(color = c, label = attr) for attr, c in color_dic.items()]
+        plt.legend(handles = handle)
         plt.savefig(self.save_file_name, format = "JPG", dpi = 1000)
         
     def visualize_degree(self):
