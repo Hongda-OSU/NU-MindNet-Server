@@ -40,8 +40,23 @@ class MindNet():
         nx.draw(self.graph, node_color = color_map, with_labels=True)
         plt.savefig(self.save_file_name, format = "JPG", dpi = 1000)
         
+    def visualize_attr(self, attr_dic: dict):
+        """
+        Visualize network structure, colored by attr_dic
+        """        
+        plt.clf()
+        num_colors = len(set(attr_dic.values()))
+        color_dic = {}
+        for val in set(attr_dic.values()):
+            if val not in color_dic:
+                color_dic[val] = np.random.uniform(0, 1, 3)
+        color_map = [color_dic[attr_dic[node]] for node in self.graph]
+        nx.draw(self.graph, node_color = color_map, with_labels=True)
+        plt.savefig(self.save_file_name, format = "JPG", dpi = 1000)
+        
     def visualize_degree(self):
-        """Generate barplot for degree distribution of all nodes
+        """
+        Generate barplot for degree distribution of all nodes
         """        
         deg_seq = [degree for idx, degree in self.graph.degree()]
         deg_seq.sort(reverse = True)
