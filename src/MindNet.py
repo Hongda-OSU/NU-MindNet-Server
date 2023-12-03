@@ -86,7 +86,13 @@ class MindNet():
         df_stat["eigen_centrality"] = nx.eigenvector_centrality(self.graph).values()
         if self.directed:
             df_stat["reciprocity"] = nx.reciprocity(self.graph, nodes = list(self.graph.nodes())).values()
-            
+
+        print("\n")
+        for col_name in df_stat.columns:
+            df_stat[f"{col_name}_rank"] = df_stat[f"{col_name}"].rank(ascending=False).astype(int)
+            df_stat[f"{col_name}_level"] = df_stat[f"{col_name}_rank"]
+        print(df_stat.head())
+    
         self.df_stat = df_stat
         
         if stat_save_path:
