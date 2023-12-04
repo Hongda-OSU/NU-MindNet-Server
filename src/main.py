@@ -14,6 +14,7 @@ def main():
     3. Create Mindnet Object and specify location to store visualization image files
     4. Visualize images based on node attributes
     5. Calculate network statistics
+    6. Store images and statistics files to S3. 
     """
     
     # file_name = "tests/test_data/test_undirected_large.csv"
