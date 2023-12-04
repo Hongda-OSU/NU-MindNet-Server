@@ -90,7 +90,9 @@ class MindNet():
         print("\n")
         for col_name in df_stat.columns:
             df_stat[f"{col_name}_rank"] = df_stat[f"{col_name}"].rank(ascending=False).astype(int)
-            df_stat[f"{col_name}_level"] = df_stat[f"{col_name}_rank"]
+            df_stat[f"{col_name}_level"] = df_stat[f"{col_name}_rank"] / len(df_stat) * 3
+            df_stat[f"{col_name}_level"] = df_stat[f"{col_name}_level"].apply(np.floor).astype(int)
+            
         print(df_stat.head())
     
         self.df_stat = df_stat
