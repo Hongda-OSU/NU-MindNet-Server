@@ -9,11 +9,12 @@ import matplotlib.patches as mpatches
 def main():
     """
     TODO: 
-    1. Read edgelist csv files from s3
-    2. Read node attributes files from s3
+    1. Read json from frontend
+    2. convert Json to pandas dataframes. One for node attributes. Several for questions. 
     3. Create Mindnet Object and specify location to store visualization image files
     4. Visualize images based on node attributes
     5. Calculate network statistics
+    6. Store images and statistics files to S3. 
     """
     
     # file_name = "tests/test_data/test_undirected_large.csv"
