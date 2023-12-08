@@ -1,8 +1,9 @@
+import os
+import boto3
 import numpy as np
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
-import scipy as sp
 import matplotlib.patches as mpatches
 
 class MindNet():
@@ -13,7 +14,7 @@ class MindNet():
             df (pandas.dataframe): pandas dataframe for network edgelist
             save_file_name (str): filepath to save network visualization
             directed (boolean): network is directed or not
-        """        
+        """  
         self.user_id = user_id
         self.data_frame = df
         self.directed = directed
@@ -22,6 +23,19 @@ class MindNet():
                            "#FF6347", "#000080", "#008080", "#808000", "#800000",
                            "#00FF00", "#00FFFF", "#FF00FF", "#C0C0C0", "#808080",
                            "#800080", "#008000", "#0000FF", "#FF0000", "#FFFF00"]
+                           
+                           
+    def upload_to_s3(self, local_file_path, s3_bucket, s3_key):
+        """
+        Uploads a file to S3
+        """
+        s3_client = boto3.client('s3')
+        s3_client.upload_file(
+            Filename=local_file_path, 
+            Bucket=s3_bucket, 
+            Key=s3_key,
+            ExtraArgs={'ACL': 'public-read', 'ContentType': 'image/jpg'} 
+        )
 
         
     def read_graph_from_edgelist(self):
@@ -34,9 +48,9 @@ class MindNet():
         else:
             graph_type = nx.Graph()
             
-        return nx.from_pandas_edgelist(self.data_frame, create_using = graph_type)
+        return nx.from_pandas_edgelist(self.data_frame, source = "Source", target = "Target", create_using = graph_type)
     
-    def visualize(self, save_file_name):
+    def visualize(self, save_file_name, s3_bucket):
         """
         Visualize network structure
         """        
@@ -45,7 +59,10 @@ class MindNet():
         nx.draw_networkx(self.graph, node_color = color_map, with_labels=True)
         plt.savefig(save_file_name, format = "JPG", dpi = 1000)
         
-    def visualize_attr(self, save_file_name: str, attr_dic: dict):
+        s3_key = os.path.basename(save_file_name)
+        self.upload_to_s3(save_file_name, s3_bucket, s3_key)
+        
+    def visualize_attr(self, save_file_name: str, attr_dic: dict, s3_bucket):
         """
         Visualize network structure, colored by attr_dic
         """        
@@ -63,21 +80,9 @@ class MindNet():
         plt.legend(handles = handle)
         plt.savefig(save_file_name, format = "JPG", dpi = 1000)
         
-    # def visualize_degree(self):
-    #     """
-    #     Generate barplot for degree distribution of all nodes
-    #     """        
-    #     deg_seq = [degree for idx, degree in self.graph.degree()]
-    #     deg_seq.sort(reverse = True)
-    #     deg_set = set(deg_seq)
-    #     counts = [deg_seq.count(d) for d in deg_set]
-    #     user_deg = self.graph.degree(self.user_id)
-    #     plt.clf()
-    #     plt.bar(list(deg_set), counts)
-    #     plt.xlabel("Degree")
-    #     plt.ylabel("Freq")
-    #     plt.axvline(x=user_deg, c = "red")
-    #     # plt.savefig("degree.jpg", format = "JPG", dpi = 1000)
+        s3_key = os.path.basename(save_file_name)
+        self.upload_to_s3(save_file_name, s3_bucket, s3_key)
+        
         
     def statistics(self, stat_save_path = None):
         """
